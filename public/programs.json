@@ -1,0 +1,263 @@
+{
+
+  "programs": [
+    {
+      "programID": "1",
+      "name": "Beginner Running",
+      "durationWeek": "12",
+      "weeks": [
+        {
+          "weekID": "1",
+          "finished":false,
+          "days": [
+            {
+              "dayID": "1",
+              "finished": false,
+              "sequencies": [
+              {
+                  "type": "warm-up", 
+                  "time": "5"
+                  },
+                {
+                  "type": "walk", 
+                  "time": "5"
+              },
+              {
+                  "type": "trot", 
+                  "time": "5"
+              },
+              {
+                  "type": "sprint", 
+                  "time": "5"
+              },
+              {
+                  "type": "Stretching", 
+                  "time": "10"
+              }
+              ]
+            },
+            {
+              "dayID": "2",
+              "finished": false,
+              "sequencies": [
+              {
+                  "type": "warm-up", 
+                  "time": "5"
+                  },
+                {
+                  "type": "walk", 
+                  "time": "5"
+              },
+              {
+                  "type": "trot", 
+                  "time": "5"
+              },
+              {
+                  "type": "sprint", 
+                  "time": "5"
+              },
+              {
+                  "type": "Stretching", 
+                  "time": "10"
+              }
+              ]
+            },
+            {
+              "dayID": "3",
+              "finished": false,
+              "sequencies": [
+              {
+                  "type": "warm-up", 
+                  "time": "5"
+                  },
+                {
+                  "type": "walk", 
+                  "time": "5"
+              },
+              {
+                  "type": "trot", 
+                  "time": "5"
+              },
+              {
+                  "type": "sprint", 
+                  "time": "5"
+              },
+              {
+                  "type": "Stretching", 
+                  "time": "10"
+              }
+              ]
+            }
+          ]
+        },
+        {
+          "weekID": "2",
+          "finished": true,
+          "days": [
+            {
+              "dayID": 4,
+              "finished": false,
+              "sequencies": [
+              {
+                  "type": "warm-up", 
+                  "time": "5"
+                  },
+                {
+                  "type": "walk", 
+                  "time": "5"
+              },
+              {
+                  "type": "trot", 
+                  "time": "5"
+              },
+              {
+                  "type": "sprint", 
+                  "time": "5"
+              },
+              {
+                  "type": "Stretching", 
+                  "time": "10"
+              }
+              ]
+            },
+            {
+              "dayID": "5",
+              "finished": false,
+              "sequencies": [
+              {
+                  "type": "warm-up", 
+                  "time": "5"
+                  },
+                {
+                  "type": "walk", 
+                  "time": "5"
+              },
+              {
+                  "type": "trot", 
+                  "time": "5"
+              },
+              {
+                  "type": "sprint", 
+                  "time": "5"
+              },
+              {
+                  "type": "Stretching", 
+                  "time": "10"
+              }
+              ]
+            },
+            {
+              "dayID": "6",
+              "finished": false,
+              "sequencies": [
+              {
+                  "type": "warm-up", 
+                  "time": "5"
+                  },
+                {
+                  "type": "walk", 
+                  "time": "5"
+              },
+              {
+                  "type": "trot", 
+                  "time": "5"
+              },
+              {
+                  "type": "sprint", 
+                  "time": "5"
+              },
+              {
+                  "type": "Stretching", 
+                  "time": "10"
+              }
+              ]
+            }
+          ]
+        } ,
+        {
+          "weekID": "1",
+          "days": [
+            {
+              "dayID": "1",
+              "finished": false,
+              "sequencies": [
+              {
+                  "type": "warm-up", 
+                  "time": "5"
+                  },
+                {
+                  "type": "walk", 
+                  "time": "5"
+              },
+              {
+                  "type": "trot", 
+                  "time": "5"
+              },
+              {
+                  "type": "sprint", 
+                  "time": "5"
+              },
+              {
+                  "type": "Stretching", 
+                  "time": "10"
+              }
+              ]
+            },
+            {
+              "dayID": "2",
+              "finished": false,
+              "sequencies": [
+              {
+                  "type": "warm-up", 
+                  "time": "5"
+                  },
+                {
+                  "type": "walk", 
+                  "time": "5"
+              },
+              {
+                  "type": "trot", 
+                  "time": "5"
+              },
+              {
+                  "type": "sprint", 
+                  "time": "5"
+              },
+              {
+                  "type": "Stretching", 
+                  "time": "10"
+              }
+              ]
+            },
+            {
+              "dayID": "3",
+              "finished": false,
+              "sequencies": [
+              {
+                  "type": "warm-up", 
+                  "time": "5"
+                  },
+                {
+                  "type": "walk", 
+                  "time": "5"
+              },
+              {
+                  "type": "trot", 
+                  "time": "5"
+              },
+              {
+                  "type": "sprint", 
+                  "time": "5"
+              },
+              {
+                  "type": "Stretching", 
+                  "time": "10"
+              }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
