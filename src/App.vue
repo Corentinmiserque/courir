@@ -1,16 +1,16 @@
 <script setup>
 import { onMounted } from 'vue';
+import { useProgramStore } from '@/stores/programs';
+import { switchInstallBtn } from './register-sw';
+const programStore = useProgramStore();
+onMounted(() => {
+  switchInstallBtn();
 
-import {switchInstallBtn} from './register-sw';
-import {  RouterView } from 'vue-router'
+  // Initialise le store Pinia
+  programStore.initializeData();
 
-// import ParcoursView from './views/ParcoursView.vue';
-
-onMounted( () =>{
-  switchInstallBtn()
-})
-
-
+  
+});
 </script>
 
 <template>
@@ -19,17 +19,15 @@ onMounted( () =>{
       <button class="install-btn hidden">Install</button>
     </div>
 
-
     <section class="section">
-    <RouterView />
-  </section>
+      <RouterView />
+    </section>
   </header>
-
 </template>
 
-<style  scoped >
-.hidden{
-    display: none;
+<style scoped>
+.hidden {
+  display: none;
 }
 </style>
 

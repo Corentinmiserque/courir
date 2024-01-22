@@ -2,348 +2,37 @@ import { defineStore } from 'pinia';
 
 export const useProgramStore = defineStore('program', {
   state: () => ({
-    data: {
-      "programs": [
-        {
-          "programID": "1",
-          "name": "Beginner Running",
-          "durationWeek": "12",
-          "weeks": [
-            {
-              "weekID": "1",
-              "finished": true,
-              "days": [
-                {
-                  "dayID": "1",
-                  "finished": true,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "0.1",
-                      "finished": false
-                    },
-                    {
-                      "type": "walk",
-                      "time": "0.1",
-                      "finished": false
-                    },
-                    {
-                      "type": "trot",
-                      "time": "0.1",
-                      "finished": false
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "0.1",
-                      "finished": false
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "0.1",
-                      "finished": false
-                    }
-                  ]
-                },
-                {
-                  "dayID": "2",
-                  "finished": false,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "walk",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "trot",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "10",
-                      "finished": false
-                    }
-                  ]
-                },
-                {
-                  "dayID": "3",
-                  "finished": false,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "walk",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "trot",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "10",
-                      "finished": false
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "weekID": "2",
-              "finished": true,
-              "days": [
-                {
-                  "dayID": "4",
-                  "finished": true,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "1",
-                      "finished": true
-                    },
-                    {
-                      "type": "walk",
-                      "time": "1",
-                      "finished": true
-                    },
-                    {
-                      "type": "trot",
-                      "time": "1",
-                      "finished": true
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "1",
-                      "finished": true
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "1",
-                      "finished": true
-                    }
-                  ]
-                },
-                {
-                  "dayID": "5",
-                  "finished": true,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "5",
-                      "finished": true
-                    },
-                    {
-                      "type": "walk",
-                      "time": "5",
-                      "finished": true
-                    },
-                    {
-                      "type": "trot",
-                      "time": "5",
-                      "finished": true
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "5",
-                      "finished": true
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "10",
-                      "finished": true
-                    }
-                  ]
-                },
-                {
-                  "dayID": "6",
-                  "finished": false,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "walk",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "trot",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "10",
-                      "finished": false
-                    }
-                  ]
-                },
-                {
-                  "dayID": "7",
-                  "finished": false,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "walk",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "trot",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "10",
-                      "finished": false
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "weekID": "3",
-              "finished": false,
-              "days": [
-                {
-                  "dayID": "1",
-                  "finished": true,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "1",
-                      "finished": true
-                    },
-                    {
-                      "type": "walk",
-                      "time": "1",
-                      "finished": true
-                    },
-                    {
-                      "type": "trot",
-                      "time": "1",
-                      "finished": true
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "1",
-                      "finished": true
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "1",
-                      "finished": true
-                    }
-                  ]
-                },
-                {
-                  "dayID": "2",
-                  "finished": false,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "walk",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "trot",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "10",
-                      "finished": false
-                    }
-                  ]
-                },
-                {
-                  "dayID": "3",
-                  "finished": false,
-                  "sequences": [
-                    {
-                      "type": "warm-up",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "walk",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "trot",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "sprint",
-                      "time": "5",
-                      "finished": false
-                    },
-                    {
-                      "type": "Stretching",
-                      "time": "10",
-                      "finished": false
-                    }
-                  ]
-                },
-              ]
-            },
-          ]
-        }
-      ]
-    },
+    data: {},
   }),
-
+getters:{
+  allData: (state) => state.data,
+},
   actions: {
+    async initializeData() {
+      const localStorageData = localStorage.getItem('courirData');
+
+      if (localStorageData) {
+        this.data = JSON.parse(localStorageData);
+        // alert('Data loaded from local storage');
+      } else {
+        try {
+          // Fetch data from programs.json
+          const response = await fetch('programs.json'); 
+          const programsJson = await response.json();
+
+          console.log(programsJson)
+
+          this.$patch({data:programsJson});
+
+          //this.updateLocalStorage();
+          localStorage.setItem('courirData', JSON.stringify(this.data));
+          // alert('Data loaded from programs.json');
+        } catch (error) {
+          console.error('Error loading data from programs.json:', error);
+        }
+      }
+    },
+    
     getDaySequences(dayId) {
       const programs = this.data.programs;
       for (const program of programs) {
@@ -356,6 +45,37 @@ export const useProgramStore = defineStore('program', {
         }
       }
       return [];
+    },
+
+
+    finishSequence(dayId, sequenceIndex) {
+      const programs = this.data.programs;
+      for (const program of programs) {
+        for (const week of program.weeks) {
+          const day = week.days.find((d) => d.dayID === dayId);
+          if (day && day.sequences[sequenceIndex]) {
+            day.sequences[sequenceIndex].finished = true;
+            this.updateLocalStorage();
+            this.finishDay(day);
+            return;
+          }
+        }
+      }
+    },
+
+    finishDay(day) {
+      // Vérifier si toutes les séquences du jour sont terminées
+      const allSequencesFinished = day.sequences.every((sequence) => sequence.finished);
+
+      // Si toutes les séquences sont terminées, marquer le jour comme terminé
+      if (allSequencesFinished) {
+        day.finished = true;
+        this.updateLocalStorage();
+      }
+    },
+    
+    updateLocalStorage() {
+      localStorage.setItem('courirData', JSON.stringify(this.data));
     },
   },
 });
