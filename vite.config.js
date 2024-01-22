@@ -18,6 +18,24 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',
+        icons: [
+  
+          {
+            src: 'logo-48-48.png',
+            sizes: '48x48',
+            type: 'image/png',
+          },
+          {
+            src: 'logo-96-96.png',
+            sizes: '96x96',
+            type: 'image/png',
+          },
+          {
+            src: 'logo-192-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+        ],
       },
       workbox: {
         runtimeCaching: [
@@ -47,5 +65,4 @@ export default defineConfig({
   css: {
     sourceMap: true,
   },
-  // base: '/test/' // deploy le build dans un sous dossier 
 });

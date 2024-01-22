@@ -39,12 +39,10 @@
 </style>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useProgramStore } from '@/stores/programs';
+import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 
-const programStore = useProgramStore();
-const data = ref(programStore.allData);
+const data = defineProps(['programs']);
 
 const countFinishedDaysInWeek = (week) => week.days.filter((day) => day.finished).length;
 
@@ -56,8 +54,8 @@ const updateProgress = () => {
       const totalWeeks = parseInt(program.durationWeek, 10);
       const weekIndex = program.weeks.indexOf(unfinishedWeek);
 
-      const progressBarWeek = document.getElementById(`progress-bar-week-${programIndex}`);
-      const progressBarDay = document.getElementById(`progress-bar-day-${programIndex}`);
+      const progressBarWeek = document.querySelector(`#progress-bar-week-${programIndex}`);
+      const progressBarDay = document.querySelector(`#progress-bar-day-${programIndex}`);
 
       const progressPercentageWeek = (weekIndex / (totalWeeks - 1)) * 100;
       progressBarWeek.value = progressPercentageWeek;
