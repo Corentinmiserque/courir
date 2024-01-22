@@ -15,13 +15,11 @@ import homepageComponent from '@/components/homepageComponent.vue';
 import legendComponent from '@/components/legendComponent.vue';
 import footerComponent from '@/components/footerComponent.vue';
 
-import { ref, onMounted } from 'vue';
+import { ref} from 'vue';
 import { useProgramStore } from '@/stores/programs';
 
 const programStore = useProgramStore();
 const data = ref(programStore.allData);
 
-onMounted(async () => {
-  // Appeler updateProgress() ici si nécessaire
-});
+
 </script>

@@ -66,14 +66,27 @@ getters:{
     finishDay(day) {
       // Vérifier si toutes les séquences du jour sont terminées
       const allSequencesFinished = day.sequences.every((sequence) => sequence.finished);
-
+    
       // Si toutes les séquences sont terminées, marquer le jour comme terminé
       if (allSequencesFinished) {
         day.finished = true;
-        this.updateLocalStorage();
+      } else {
+        // Si au moins une séquence n'est pas terminée, marquer le jour comme non terminé
+        day.finished = false;
       }
+    
+      // Mettre à jour le stockage local après chaque modification
+      this.updateLocalStorage();
     },
     
+    abandonSequences({ commit, state }, id) {
+      // Logique pour réinitialiser les séquences à "finished = false" et mettre à jour la journée
+      state.programs[id].sequences.forEach((sequence) => {
+        sequence.finished = false;
+      });
+      commit('updateDayFinished', id);
+    },
+  
     updateLocalStorage() {
       localStorage.setItem('courirData', JSON.stringify(this.data));
     },

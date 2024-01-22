@@ -11,8 +11,8 @@ export default defineConfig({
     VitePWA({
       injectRegister: 'auto',
       manifest: {
-        name: 'Ma Progressive Web App',
-        short_name: 'PWA',
+        name: 'Courir ',
+        short_name: 'Courir',
         description: 'Une description de votre application.',
         theme_color: '#ffffff',
         background_color: '#ffffff',
@@ -34,24 +34,6 @@ export default defineConfig({
             src: 'logo-192-192.png',
             sizes: '192x192',
             type: 'image/png',
-          },
-        ],
-      },
-      workbox: {
-        runtimeCaching: [
-          {
-            urlPattern: new RegExp('/(.*).(png|gif|jpg|css)$/'),
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'corentin',
-              expiration: {
-                maxEntries: 20,
-                maxAgeSeconds: 60 * 60 * 24 * 30,
-              },
-              cacheableResponse: {
-                statuses: [0,200],
-              },
-            },
           },
         ],
       },

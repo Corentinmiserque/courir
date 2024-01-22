@@ -1,6 +1,6 @@
 <template>
   <div class="homepage-info">
-    <div class="program" v-for="(program, programIndex) in data.programs" :key="program.programID">
+    <div class="program" v-for="(program, programIndex) in props.programs" :key="program.programID">
       <h2>Programme : {{ program.name }}</h2>
 
       <div v-if="program.weeks.find(week => !week.finished)">
@@ -28,26 +28,16 @@
   </div>
 </template>
 
-<style>
-.finished-day {
-  color: green;
-}
-
-.upcoming-day {
-  color: red;
-}
-</style>
-
 <script setup>
 import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 
-const data = defineProps(['programs']);
+const props = defineProps(['programs']);
 
 const countFinishedDaysInWeek = (week) => week.days.filter((day) => day.finished).length;
 
 const updateProgress = () => {
-  data.value.programs.forEach((program, programIndex) => {
+  props.programs.forEach((program, programIndex) => {
     const unfinishedWeek = program.weeks.find((week) => !week.finished);
 
     if (unfinishedWeek) {
@@ -71,7 +61,18 @@ const updateProgress = () => {
   });
 };
 
-onMounted(async () => {
+onMounted(() => {
   updateProgress();
 });
 </script>
+
+
+<style>
+.finished-day {
+  color: green;
+}
+
+.upcoming-day {
+  color: red;
+}
+</style>
