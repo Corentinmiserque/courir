@@ -58,13 +58,12 @@ const currentTab = ref(tabs[0]);
   max-width: 100px;
 }
 .tab-button {
-  padding: 6px 10px;
+  padding: 6px 10px 0;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   border: 1px solid #ccc;
   cursor: pointer;
   background: #f0f0f0;
-  margin-bottom: -1px;
   margin-right: -1px;
 }
 .tab-button:hover {
@@ -76,5 +75,11 @@ const currentTab = ref(tabs[0]);
 .tab {
   border: 1px solid #ccc;
   padding: 10px;
+}
+.content ul:not(:last-child) {
+    margin-bottom: 0;
+}
+.content ul {
+  margin-left: 0;
 }
 </style>

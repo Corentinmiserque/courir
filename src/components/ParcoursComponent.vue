@@ -1,26 +1,30 @@
 <template>
   <div>
-    <div v-if="daySequences && daySequences.length">
-      <h3>Séquence pour le jour {{ id }} - Étape {{ activeSequenceIndex + 1 }} sur {{ daySequences.length }}</h3>
+    <div v-if="daySequences && daySequences.length" class="box">
+      <h3 class="title is-4">Séquence pour le jour {{ id }} - Étape {{ activeSequenceIndex + 1 }} sur {{ daySequences.length }}</h3>
       <div v-show="!currentSequence.finished">
-        {{ currentSequence.type }} - {{ currentSequence.time }} minutes
+        <h2 class="subtitle is-1">{{ currentSequence.type }} - {{ currentSequence.time }} minutes</h2>
         <div v-if="activeSequenceIndex === activeSequenceIndex">
-          Temps restant : {{ formatTime(timeRemaining) }}
+          <p>Temps restant : {{ formatTime(timeRemaining) }}</p>
         </div>
         <div>
-          <!-- Affiche la distance parcourue -->
-          Distance parcourue : {{ distance.toFixed(0) }} mètres
+          <p>Distance parcourue : {{ distance.toFixed(0) }} mètres</p>
         </div>
       </div>
-      <button @click="start" :disabled="timer">
-        Start
-      </button>
-      <button @click="toggleTimer">
-        {{ timerPaused ? 'Reprendre' : 'Pause' }}
-      </button>
-      <button @click="abandonSequences">
-        Abandonné
-      </button>
+      <div class="buttons">
+        <button @click="start" :disabled="timer" class="button is-primary">
+          Start
+        </button>
+        <button @click="toggleTimer" class="button is-info">
+          {{ timerPaused ? 'Reprendre' : 'Pause' }}
+        </button>
+        <button @click="abandonSequences" class="button is-danger">
+          Abandonné
+        </button>
+      </div>
+
+        <p class="subtitle is-6">Temps total restant : {{ formatTime(totalTimeRemaining) }}</p>
+
     </div>
   </div>
 </template>
@@ -42,6 +46,8 @@ let timer;
 let timerPaused = false;
 const currentSequence = ref({});
 const distance = ref(0); // Variable pour stocker la distance parcourue
+const totalDuration = ref(0);
+const totalTimeRemaining = ref(0);
 
 const formatTime = (seconds) => {
   const minutes = Math.floor(seconds / 60);
@@ -194,22 +200,25 @@ const degToRad = (deg) => {
   return deg * (Math.PI / 180);
 };
 
+const calculateTotalDuration = () => {
+  totalDuration.value = daySequences.value.reduce((total, sequence) => total + sequence.time, 0);
+};
+
+const updateTotalTimeRemaining = () => {
+  totalTimeRemaining.value = totalDuration.value - timeRemaining.value;
+};
+
 onMounted(() => {
   daySequences.value = programStore.getDaySequences(id.value);
 
   if (daySequences.value.length > 0) {
+    calculateTotalDuration();
     showNextSequence();
   }
 });
 
-watch(activeSequenceIndex, (newValue, oldValue) => {
-  if (newValue !== oldValue) {
-    const currentSequence = daySequences.value[newValue];
-    if (currentSequence && !currentSequence.finished) {
-      startTimer(currentSequence.time, timeRemaining.value);
-      startTrackingDistance(); // Démarre le suivi de la distance
-    }
-  }
+watch(timeRemaining, () => {
+  updateTotalTimeRemaining();
 });
 
 onBeforeUnmount(() => {
@@ -218,4 +227,5 @@ onBeforeUnmount(() => {
   programStore.updateDayDistance(id.value, distance.value);
   programStore.updateLocalStorage();
 });
+
 </script>
