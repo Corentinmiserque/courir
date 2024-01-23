@@ -18,6 +18,7 @@ import homepageComponent from '@/components/homepageComponent.vue';
 import legendComponent from '@/components/legendComponent.vue';
 import footerComponent from '@/components/footerComponent.vue';
 import optionsComponent from '@/components/optionsComponent.vue';
+import GraphComponent from '@/components/GraphComponent.vue';
 
 import { ref } from 'vue';
 import { useProgramStore } from '@/stores/programs';
@@ -41,6 +42,10 @@ const tabs = [
   {
     label: "Options",
     composant: optionsComponent
+  },
+  {
+    label: "Graph",
+    composant: GraphComponent
   }
 ];
 

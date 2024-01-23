@@ -1,26 +1,37 @@
 <template>
-  <div class="homepage-info">
+  <div class="homepage-info container">
     <div v-for="(program, programIndex) in filteredPrograms" :key="program.programID">
-      <h2>Programme : {{ program.name }}</h2>
+      <h2 class="title is-4">Programme : {{ program.name }}</h2>
 
       <div v-if="program.weeks.some(week => !week.finished)">
-        <div v-if="activeWeek = program.weeks.find(week => !week.finished)">
-          <div class="week">
-            <h3>Semaine {{ program.weeks.findIndex(week => !week.finished) + 1 }} sur {{ program.durationWeek }}</h3>
-            <div id="progress-container">
-              <progress :id="'progress-bar-week-' + programIndex" value="0" max="100"></progress>
+        <div class='box' v-if="activeWeek = program.weeks.find(week => !week.finished)">
+          <div class="week container">
+            <div class="box">
+            <h3 class="subtitle is-5">Semaine {{ program.weeks.findIndex(week => !week.finished) + 1 }} sur {{ program.durationWeek }}</h3>
+            <div class="progress container">
+              <progress :id="'progress-bar-week-' + programIndex" class="progress is-primary" value="0" max="100"></progress>
             </div>
 
-            <div id="day-progress">
+            <div class="day-progress container">
               <h3>Jour {{ countFinishedDaysInWeek(activeWeek) }} sur {{ activeWeek.days.length }}</h3>
-              <progress :id="'progress-bar-day-' + programIndex" value="0" max="100"></progress>
+              <progress :id="'progress-bar-day-' + programIndex" class="progress is-info" value="0" max="100"></progress>
             </div>
-            <div class="columns  is-centered">
-            <div v-for="(day, dayIndex) in activeWeek.days" :key="day.dayID" class='box'>
-              <span v-if="day.finished" class="finished-day">Jour {{ dayIndex + 1 }} (Terminé)</span>
-              <span v-else-if="day.finished === false && dayIndex > countFinishedDaysInWeek(activeWeek)" class="upcoming-day">Jour {{ dayIndex + 1 }} (À venir)</span>
-              <RouterLink v-else :to="{ name: 'parcours', params: { id: day.dayID } }">Jour {{ dayIndex + 1 }}</RouterLink>
+          </div>
+          <div class="box">
+          <div class="columns is-centered is-justify-content-space-around ">
+              <div v-for="(day, dayIndex) in activeWeek.days" :key="day.dayID" class='column box is-2 has-text-centered'>
+                <span v-if="day.finished" class="finished-day ">Jour {{ dayIndex + 1 }} (Terminé)</span>
+                
+                <span v-else-if="day.finished === false && dayIndex > countFinishedDaysInWeek(activeWeek)" class="upcoming-day">Jour {{ dayIndex + 1 }} (À venir)</span>
+                <RouterLink v-else :to="{ name: 'parcours', params: { id: day.dayID } }">Jour {{ dayIndex + 1 }}</RouterLink>
+              </div>
             </div>
+            </div>
+            <div class=" is-centered box">
+              <div class="columns is-6 is-justify-content-space-around">
+                <button @click="resetWeek" class="button is-danger">Réinitialiser la semaine</button>
+                <button @click="resetProgram" class="button is-danger">Réinitialiser le programme</button>
+              </div>
             </div>
           </div>
         </div>
@@ -30,18 +41,45 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const props = defineProps(['programs', 'userData']);
+const activeWeek = ref(null); // Déclaration de activeWeek
 
 const filteredPrograms = computed(() => {
-  // Filter programs based on the selectedProgram in userData
   const selectedProgramID = props.userData.selectedProgramID;
   return props.programs.filter((program) => program.programID === selectedProgramID);
 });
 
 const countFinishedDaysInWeek = (week) => week.days.filter((day) => day.finished).length;
+
+const resetWeek = () => {
+  if (activeWeek.value) {
+    activeWeek.value.days.forEach(day => {
+      day.finished = false;
+      day.sequences.forEach(sequence => {
+        sequence.finished = false;
+      });
+    });
+    updateProgress();
+  }
+};
+
+const resetProgram = () => {
+  filteredPrograms.value.forEach((program) => {
+    program.weeks.forEach((week) => {
+      week.days.forEach(day => {
+        day.finished = false;
+        day.sequences.forEach(sequence => {
+          sequence.finished = false;
+        });
+      });
+      week.finished = false;
+    });
+  });
+  updateProgress();
+};
 
 const updateProgress = () => {
   filteredPrograms.value.forEach((program, programIndex) => {
@@ -68,10 +106,12 @@ const updateProgress = () => {
   });
 };
 
-onMounted(async () => {
+onMounted( () => {
   updateProgress();
 });
 </script>
+
+
 
 <style>
 .finished-day {

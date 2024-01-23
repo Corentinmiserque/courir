@@ -3,13 +3,14 @@
     <div v-if="daySequences && daySequences.length" class="box">
       <h3 class="title is-4">Séquence pour le jour {{ id }} - Étape {{ activeSequenceIndex + 1 }} sur {{ daySequences.length }}</h3>
       <div v-show="!currentSequence.finished">
-        <h2 class="subtitle is-1">{{ currentSequence.type }} - {{ currentSequence.time }} minutes</h2>
+        <h2 class="subtitle is-1">{{ currentSequence.type }} pendant {{ currentSequence.time }} minutes</h2>
         <div v-if="activeSequenceIndex === activeSequenceIndex">
-          <p>Temps restant : {{ formatTime(timeRemaining) }}</p>
+          <p class="subtitle is-5">Temps restant : {{ formatTime(timeRemaining) }}</p>
         </div>
         <div>
-          <p>Distance parcourue : {{ distance.toFixed(0) }} mètres</p>
+          <p class="subtitle is-5">Distance parcourue : {{ distance.toFixed(0) }} mètres</p>
         </div>
+        <p class="subtitle is-5">Temps total restant : {{ formatTime(totalTimeRemaining) }}</p>
       </div>
       <div class="buttons">
         <button @click="start" :disabled="timer" class="button is-primary">
@@ -22,11 +23,17 @@
           Abandonné
         </button>
       </div>
-
-        <p class="subtitle is-6">Temps total restant : {{ formatTime(totalTimeRemaining) }}</p>
-
+      <div v-show="currentSequence.finished">
+      <div class="congratulations">
+        <h2 class="title is-2">Félicitations!</h2>
+        <p>Vous avez couru {{ distance.toFixed(0) }} mètres en {{ formatTime(totalTimeElapsed) }}.</p>
+        <button @click="goToPreviousPage">Retour à la page précédente</button>
+      </div>
+      </div>
     </div>
   </div>
+
+  
 </template>
 
 <script setup>
@@ -48,11 +55,24 @@ const currentSequence = ref({});
 const distance = ref(0); // Variable pour stocker la distance parcourue
 const totalDuration = ref(0);
 const totalTimeRemaining = ref(0);
+const totalTimeElapsed = ref(0);
 
 const formatTime = (seconds) => {
   const minutes = Math.floor(seconds / 60);
   const secondsRemaining = seconds % 60;
   return `${minutes}:${secondsRemaining < 10 ? '0' : ''}${secondsRemaining}`;
+};
+
+const calculateTotalDuration = () => {
+  totalDuration.value = daySequences.value.reduce((total, sequence) => total + sequence.time * 60, 0);
+};
+
+const goToPreviousPage = () => {
+  $router.go(-1);
+};
+
+const updateTotalTimeRemaining = () => {
+  totalTimeRemaining.value = totalDuration.value - totalTimeElapsed.value;
 };
 
 const speak = (text) => {
@@ -111,6 +131,9 @@ const showNextSequence = () => {
   if (nextIndex !== -1) {
     activeSequenceIndex.value = nextIndex;
     currentSequence.value = daySequences.value[nextIndex];
+    
+    // Recalculate total time remaining after updating active sequence index
+    updateTotalTimeRemaining();
   }
 };
 
@@ -128,10 +151,15 @@ const startTimer = (duration, savedTime = 0) => {
       clearInterval(timer);
       finishSequence();
     }
+
+    totalTimeElapsed.value++; // Accumuler le temps total écoulé
+    updateTotalTimeRemaining();
   }, 1000);
 
   timerPaused = false;
 };
+
+
 
 const abandonSequences = () => {
   const id = route.params.id;
@@ -200,32 +228,29 @@ const degToRad = (deg) => {
   return deg * (Math.PI / 180);
 };
 
-const calculateTotalDuration = () => {
-  totalDuration.value = daySequences.value.reduce((total, sequence) => total + sequence.time, 0);
-};
-
-const updateTotalTimeRemaining = () => {
-  totalTimeRemaining.value = totalDuration.value - timeRemaining.value;
-};
-
 onMounted(() => {
   daySequences.value = programStore.getDaySequences(id.value);
 
   if (daySequences.value.length > 0) {
     calculateTotalDuration();
     showNextSequence();
+    
   }
 });
 
-watch(timeRemaining, () => {
-  updateTotalTimeRemaining();
+watch(activeSequenceIndex, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    const currentSequence = daySequences.value[newValue];
+    if (currentSequence && !currentSequence.finished) {
+      startTimer(currentSequence.time, timeRemaining.value);
+      startTrackingDistance(); // Démarre le suivi de la distance
+    }
+  }
 });
 
 onBeforeUnmount(() => {
   clearInterval(timer);
   stopTrackingDistance(); // Arrête le suivi de la distance
-  programStore.updateDayDistance(id.value, distance.value);
   programStore.updateLocalStorage();
 });
-
 </script>
