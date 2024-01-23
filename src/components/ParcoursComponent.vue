@@ -78,11 +78,20 @@ const updateTotalTimeRemaining = () => {
 const speak = (text) => {
   if (text !== lastAnnouncedMessage) {
     const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(text);
-    synth.speak(utterance);
-    lastAnnouncedMessage = text;
+    
+    // Vérifier si la synthèse vocale est disponible
+    if (synth && synth.getVoices().length > 0) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Utiliser la première voix disponible plutôt que de spécifier une voix
+      utterance.voice = synth.getVoices()[0];
+      
+      synth.speak(utterance);
+      lastAnnouncedMessage = text;
+    }
   }
 };
+
 
 const start = () => {
   if (!timer) {
