@@ -82,9 +82,12 @@ const speak = (text) => {
     // Vérifier si la synthèse vocale est disponible
     if (synth && synth.getVoices().length > 0) {
       const utterance = new SpeechSynthesisUtterance(text);
+
+      // Trouver la voix correspondant au français (langue 'fr-FR')
+      const frenchVoice = synth.getVoices().find(voice => voice.lang === 'fr-FR');
       
-      // Utiliser la première voix disponible plutôt que de spécifier une voix
-      utterance.voice = synth.getVoices()[0];
+      // Utiliser la voix en français s'il est disponible, sinon utiliser la première voix disponible
+      utterance.voice = frenchVoice || synth.getVoices()[0];
       
       synth.speak(utterance);
       lastAnnouncedMessage = text;

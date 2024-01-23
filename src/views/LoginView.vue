@@ -71,7 +71,7 @@ const programs = computed(() => {
 });
 
 // Vérifie s'il y a déjà des données utilisateur enregistrées dans le stockage local lors du montage du composant
-onMounted(async() => {
+onMounted(() => {
   const savedUserData = UserStore.theUser;
   console.log(savedUserData);
   if (Object.keys(savedUserData).length !== 0) {
