@@ -1,9 +1,9 @@
 <template>
   <div class="homepage-info">
-    <div class="program" v-for="(program, programIndex) in props.programs" :key="program.programID">
+    <div v-for="(program, programIndex) in filteredPrograms" :key="program.programID">
       <h2>Programme : {{ program.name }}</h2>
 
-      <div v-if="program.weeks.find(week => !week.finished)">
+      <div v-if="program.weeks.some(week => !week.finished)">
         <div v-if="activeWeek = program.weeks.find(week => !week.finished)">
           <div class="week">
             <h3>Semaine {{ program.weeks.findIndex(week => !week.finished) + 1 }} sur {{ program.durationWeek }}</h3>
@@ -15,11 +15,12 @@
               <h3>Jour {{ countFinishedDaysInWeek(activeWeek) }} sur {{ activeWeek.days.length }}</h3>
               <progress :id="'progress-bar-day-' + programIndex" value="0" max="100"></progress>
             </div>
-
-            <div v-for="(day, dayIndex) in activeWeek.days" :key="day.dayID">
+            <div class="columns  is-centered">
+            <div v-for="(day, dayIndex) in activeWeek.days" :key="day.dayID" class='box'>
               <span v-if="day.finished" class="finished-day">Jour {{ dayIndex + 1 }} (Terminé)</span>
               <span v-else-if="day.finished === false && dayIndex > countFinishedDaysInWeek(activeWeek)" class="upcoming-day">Jour {{ dayIndex + 1 }} (À venir)</span>
               <RouterLink v-else :to="{ name: 'parcours', params: { id: day.dayID } }">Jour {{ dayIndex + 1 }}</RouterLink>
+            </div>
             </div>
           </div>
         </div>
@@ -29,15 +30,21 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 
-const props = defineProps(['programs']);
+const props = defineProps(['programs', 'userData']);
+
+const filteredPrograms = computed(() => {
+  // Filter programs based on the selectedProgram in userData
+  const selectedProgramID = props.userData.selectedProgramID;
+  return props.programs.filter((program) => program.programID === selectedProgramID);
+});
 
 const countFinishedDaysInWeek = (week) => week.days.filter((day) => day.finished).length;
 
 const updateProgress = () => {
-  props.programs.forEach((program, programIndex) => {
+  filteredPrograms.value.forEach((program, programIndex) => {
     const unfinishedWeek = program.weeks.find((week) => !week.finished);
 
     if (unfinishedWeek) {
@@ -61,11 +68,10 @@ const updateProgress = () => {
   });
 };
 
-onMounted(() => {
+onMounted(async () => {
   updateProgress();
 });
 </script>
-
 
 <style>
 .finished-day {

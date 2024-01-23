@@ -86,6 +86,27 @@ getters:{
       });
       commit('updateDayFinished', id);
     },
+    
+    updateDayDistance(dayId, distance) {
+      const programs = this.data.programs;
+
+      // Loop through programs, weeks, and days to find the specific day
+      for (const program of programs) {
+        for (const week of program.weeks) {
+          for (const day of week.days) {
+            if (day.dayID === dayId) {
+              // Update the day's distance in the store
+              day.distance = distance;
+
+              // Update the local storage
+              this.updateLocalStorage();
+
+              return;
+            }
+          }
+        }
+      }
+    },
   
     updateLocalStorage() {
       localStorage.setItem('courirData', JSON.stringify(this.data));

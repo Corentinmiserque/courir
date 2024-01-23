@@ -1,17 +1,21 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useProgramStore } from '@/stores/programs';
+import { useUserStore } from './stores/user';
 import { switchInstallBtn } from './register-sw';
+
 const programStore = useProgramStore();
+const userStore = useUserStore();
+
 onMounted(() => {
   switchInstallBtn();
 
   // Initialise le store Pinia
   programStore.initializeData();
-
-  
+  userStore.loadUserData(); 
 });
 </script>
+
 
 <template>
   <header>

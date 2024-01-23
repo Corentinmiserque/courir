@@ -9,7 +9,7 @@
         </div>
         <div>
           <!-- Affiche la distance parcourue -->
-          Distance parcourue : {{ distance }} mètres
+          Distance parcourue : {{ distance.toFixed(0) }} mètres
         </div>
       </div>
       <button @click="start" :disabled="timer">
@@ -187,10 +187,11 @@ const calculateDistance = (coord1, coord2) => {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   const distance = earthRadius * c;
-  const distanceInMeters = distance * 1000; // Convertit en mètres
+  return distance * 1000; // Convertit en mètres
+};
 
-  // Arrondir au nombre entier le plus proche
-  return Math.round(distanceInMeters);
+const degToRad = (deg) => {
+  return deg * (Math.PI / 180);
 };
 
 onMounted(() => {
@@ -214,6 +215,7 @@ watch(activeSequenceIndex, (newValue, oldValue) => {
 onBeforeUnmount(() => {
   clearInterval(timer);
   stopTrackingDistance(); // Arrête le suivi de la distance
+  programStore.updateDayDistance(id.value, distance.value);
   programStore.updateLocalStorage();
 });
 </script>
