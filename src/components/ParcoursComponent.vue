@@ -238,6 +238,8 @@ const startTrackingDistance = () => {
 const stopTrackingDistance = () => {
   if (watchId) {
     navigator.geolocation.clearWatch(watchId);
+    confirm('We will use your geolocation data to calculate your distance traveled. Do you accept?');
+
   }
 };
 
