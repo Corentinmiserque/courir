@@ -231,15 +231,9 @@ let previousPosition; // Variable pour stocker la position précédente
 
 // Function to start tracking distance
 const startTrackingDistance = () => {
-  const userConfirmed = window.confirm('We will use your geolocation data to calculate your distance traveled. Do you accept?');
-  
-  if (userConfirmed) {
-    watchId = navigator.geolocation.watchPosition(updateDistance);
-  } else {
-    // L'utilisateur a cliqué sur "Annuler", vous pouvez gérer cela en conséquence
-  }
+  window.confirm('We will use your geolocation data to calculate your distance traveled. Do you accept?');
+  watchId = navigator.geolocation.watchPosition(updateDistance);
 };
-
 
 // Function to stop tracking distance
 const stopTrackingDistance = () => {
