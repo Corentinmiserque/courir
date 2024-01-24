@@ -1,40 +1,52 @@
 <template>
   <div>
     <div v-if="daySequences && daySequences.length" class="box">
-      <h3 class="title is-4">Séquence pour le jour {{ id }} - Étape {{ activeSequenceIndex + 1 }} sur {{ daySequences.length }}</h3>
+      <h3 class="title is-4"> Step {{ activeSequenceIndex + 1 }} of {{ daySequences.length }}</h3>
       <div v-show="!currentSequence.finished">
-        <h2 v-show="timer && !timerPaused" class="subtitle is-1">{{ currentSequence.type }} pendant {{ currentSequence.time }} minutes</h2>
+        <h2 v-show="timer && !timerPaused" class="subtitle is-1">{{ currentSequence.type }} for {{ currentSequence.time }} minutes</h2>
+
+<div class="container time mb-5">
         <div v-if="activeSequenceIndex === activeSequenceIndex">
-          <p class="subtitle is-5">Temps restant : {{ formatTime(timeRemaining) }}</p>
+          <p class="subtitle is-5">Time remaining: {{ formatTime(timeRemaining) }}</p>
         </div>
         <div>
-          <p class="subtitle is-5">Distance parcourue : {{ distance.toFixed(0) }} mètres</p>
+          <p class="subtitle is-5">Distance covered: {{ distance.toFixed(0) }} meters</p>
         </div>
-        <p class="subtitle is-5">Temps total restant : {{ formatTime(totalTimeRemaining) }}</p>
+        <p class="subtitle is-5">Total time remaining: {{ formatTime(totalTimeRemaining) }}</p>
       </div>
-      <div class="buttons">
-        <button @click="start" :disabled="timer" class="button is-primary">
+    </div>
+
+      <div class="buttons container">
+        <button @click="start" v-show="!timer" class="button is-primary">
           Start
         </button>
-        <button @click="toggleTimer" class="button is-info">
-          {{ timerPaused ? 'Reprendre' : 'Pause' }}
+        <button @click="toggleTimer" v-show="!currentSequence.finished" class="button is-info">
+          {{ timerPaused ? 'Resume' : 'Pause' }}
         </button>
-        <button @click="abandonSequences" class="button is-danger">
-          Abandonné
+        <button @click="abandonSequences"  v-show="!currentSequence.finished" class="button is-danger">
+          Give up
         </button>
+
       </div>
       <div v-show="currentSequence.finished">
-      <div class="congratulations">
-        <h2 class="title is-2">Félicitations!</h2>
-        <p>Vous avez couru {{ distance.toFixed(0) }} mètres en {{ formatTime(totalTimeElapsed) }}.</p>
-        <button @click="goToPreviousPage">Retour à la page précédente</button>
-      </div>
+        <div class="congratulations box">
+          <h2 class="title is-2">Congratulations!</h2>
+          <p>You ran {{ distance.toFixed(0) }} meters in {{ formatTime(totalTimeElapsed) }}.</p>
+          <button class="button is-info" @click="goToPreviousPage">
+            finish
+          </button>
+          <button @click="abandonSequences" class="button is-danger restart">
+            <p>Restart</p>
+          </button>
+        </div>
       </div>
     </div>
   </div>
+</template>
+
 
   
-</template>
+
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
@@ -98,8 +110,8 @@ const speak = (text) => {
 };
 
 const vibrate = () => {
-  if (navigator.vibrate & optionVibration) {
-    navigator.vibrate([200, 100, 200]); // Modifiez le modèle de vibration selon vos besoins
+  if (navigator.vibrate && optionVibration) {
+    navigator.vibrate([200, 100, 200]);
   }
 };
 
@@ -109,6 +121,7 @@ const start = () => {
     const currentSequence = daySequences.value[activeSequenceIndex.value];
     if (currentSequence && !currentSequence.finished) {
       startTimer(currentSequence.time, timeRemaining.value);
+      speak(`${currentSequence.value.type} during ${currentSequence.value.time} minutes`);
       startTrackingDistance(); // Démarre le suivi de la distance
     }
   }
@@ -163,7 +176,7 @@ const startTimer = (duration, savedTime = 0) => {
 
   clearInterval(timer);
 
-  speak(`${currentSequence.value.type} pendant ${currentSequence.value.time} minutes`);
+  speak(`${currentSequence.value.type} during ${currentSequence.value.time} minutes`);
 
   timer = setInterval(() => {
     timeRemaining.value--;
@@ -275,3 +288,9 @@ onBeforeUnmount(() => {
   programStore.updateLocalStorage();
 });
 </script>
+<style>
+.restart{
+  margin-left: 20px;
+}
+
+</style>
