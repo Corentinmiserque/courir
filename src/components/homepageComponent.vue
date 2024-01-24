@@ -37,7 +37,7 @@
                   <span v-if="day.finished" class="finished-day ">Day {{ dayIndex + 1 }} (Finished)</span>
                   <span v-else-if="day.finished === false && dayIndex > countFinishedDaysInWeek(activeWeek)" class="upcoming-day">Day {{ dayIndex + 1 }} (Upcoming)</span>
                   <!-- Link to the route for the day -->
-                  <RouterLink v-else :to="{ name: 'parcours', params: { id: day.dayID } }">Day {{ dayIndex + 1 }}</RouterLink>
+                  <RouterLink v-else :to="{ name: 'parcours', params: { id: day.dayID } }"><span class="overlay">Day {{ dayIndex + 1 }}</span></RouterLink>
                 </div>
               </div>
             </div>
@@ -143,5 +143,8 @@ onMounted( () => {
 
 .upcoming-day {
   color: red;
+}
+.overlay{
+background-color: blue;
 }
 </style>

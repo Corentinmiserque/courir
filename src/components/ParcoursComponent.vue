@@ -1,60 +1,49 @@
 <template>
-  <!-- Main container -->
   <div>
-    <!-- Check if daySequences is not empty -->
     <div v-if="daySequences && daySequences.length" class="box">
-      <!-- Display current sequence information -->
-      <h3 class="title is-4" v-show="!currentSequence.finished"> Step {{ activeSequenceIndex + 1 }} of {{ daySequences.length }}</h3>
+      <h3 class="title is-4"> Step {{ activeSequenceIndex + 1 }} of {{ daySequences.length }}</h3>
       <div v-show="!currentSequence.finished">
-        <!-- Display current sequence type and time -->
         <h2 v-show="timer && !timerPaused" class="subtitle is-1">{{ currentSequence.type }} for {{ currentSequence.time }} minutes</h2>
 
-        <!-- Display time, distance, and total time remaining -->
-        <div class="container time mb-5">
-          <div v-if="activeSequenceIndex === activeSequenceIndex">
-            <p class="subtitle is-5">Time remaining: {{ formatTime(timeRemaining) }}</p>
-          </div>
-          <div>
-            <p class="subtitle is-5">Distance covered: {{ distance.toFixed(0) }} meters</p>
-          </div>
-          <p class="subtitle is-5">Total time remaining: {{ formatTime(totalTimeRemaining) }}</p>
+<div class="container time mb-">
+        <div v-if="activeSequenceIndex === activeSequenceIndex">
+          <p class="subtitle is-5">Time remaining: {{ formatTime(timeRemaining) }}</p>
         </div>
+        <div>
+          <p class="subtitle is-5">Distance covered: {{ distance.toFixed(0) }} meters</p>
+        </div>
+        <p class="subtitle is-5">Total time remaining: {{ formatTime(totalTimeRemaining) }}</p>
       </div>
     </div>
 
-    <!-- Buttons container -->
-    <div class="buttons container">
-      <!-- Start button -->
-      <button @click="start" v-show="!timer" class="button is-primary">
-        Start
-      </button>
-      <!-- Pause/Resume button -->
-      <button @click="toggleTimer" v-show="!currentSequence.finished" class="button is-info">
-        {{ timerPaused ? 'Resume' : 'Pause' }}
-      </button>
-      <!-- Give up button -->
-      <button @click="abandonSequences"  v-show="!currentSequence.finished" class="button is-danger">
-        Give up
-      </button>
-    </div>
+      <div class="buttons container">
+        <button @click="start" v-show="!timer" class="button is-primary">
+          Start
+        </button>
+        <button @click="toggleTimer" v-show="!currentSequence.finished" class="button is-info">
+          {{ timerPaused ? 'Resume' : 'Pause' }}
+        </button>
+        <button @click="abandonSequences"  v-show="!currentSequence.finished" class="button is-danger">
+          Give up
+        </button>
 
-    <!-- Display congratulations and options after finishing all sequences -->
-    <div v-show="currentSequence.finished">
-      <div class="congratulations box">
-        <h2 class="title is-2">Congratulations!</h2>
-        <p>You ran {{ distance.toFixed(0) }} meters in {{ formatTime(totalTimeElapsed) }}.</p>
-        <!-- Finish button -->
-        <button class="button is-info" @click="goToPreviousPage">
-          Finish
-        </button>
-        <!-- Restart button -->
-        <button @click="abandonSequences" class="button is-danger restart">
-          <p>Restart</p>
-        </button>
+      </div>
+      <div v-show="currentSequence.finished">
+        <div class="congratulations box">
+          <h2 class="title is-2">Congratulations!</h2>
+          <p>You ran {{ distance.toFixed(0) }} meters in {{ formatTime(totalTimeElapsed) }}.</p>
+          <button class="button is-info" @click="goToPreviousPage">
+            Back to the previous page
+          </button>
+          <button @click="abandonSequences" class="button is-danger restart">
+            <p>Restart</p>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
   
 
@@ -88,42 +77,45 @@ const formatTime = (seconds) => {
   return `${minutes}:${secondsRemaining < 10 ? '0' : ''}${secondsRemaining}`;
 };
 
-// Function to calculate the total duration of all sequences
 const calculateTotalDuration = () => {
   totalDuration.value = daySequences.value.reduce((total, sequence) => total + sequence.time * 60, 0);
 };
 
-// Function to navigate to the previous page
 const goToPreviousPage = () => {
   $router.go(-1);
 };
 
-// Function to update total time remaining
 const updateTotalTimeRemaining = () => {
   totalTimeRemaining.value = totalDuration.value - totalTimeElapsed.value;
 };
 
-// Function to announce messages using text-to-speech and optional vibration
+const optionSound = userStore.theUser.options.sound;
+const optionVibration = userStore.theUser.options.vibration
+
 const speak = (text) => {
-  if (text !== lastAnnouncedMessage && userStore.theUser.options.sound) {
+  if (text !== lastAnnouncedMessage && optionSound) {
     const synth = window.speechSynthesis;
+    
+    // Vérifier si la synthèse vocale est disponible
     if (synth && synth.getVoices().length > 0) {
       const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Utiliser la première voix disponible plutôt que de spécifier une voix
       utterance.voice = synth.getVoices()[0];
+      
       synth.speak(utterance);
       lastAnnouncedMessage = text;
     }
   }
 };
 
-// Function to trigger vibration if enabled
 const vibrate = () => {
-  if (navigator.vibrate && userStore.theUser.options.vibration) {
-    navigator.vibrate([200, 100, 200]);
+  if (navigator.vibrate & optionVibration) {
+    navigator.vibrate([200, 100, 200]); // Modifiez le modèle de vibration selon vos besoins
   }
 };
 
-// Function to start a sequence
+
 const start = () => {
   if (!timer) {
     const currentSequence = daySequences.value[activeSequenceIndex.value];
@@ -135,7 +127,6 @@ const start = () => {
   }
 };
 
-// Function to pause the timer
 const pauseTimer = () => {
   clearInterval(timer);
   timer = null;
@@ -143,7 +134,6 @@ const pauseTimer = () => {
   stopTrackingDistance(); // Arrête le suivi de la distance
 };
 
-// Function to toggle the timer (pause/resume)
 const toggleTimer = () => {
   if (timer) {
     pauseTimer();
@@ -156,7 +146,6 @@ const toggleTimer = () => {
   }
 };
 
-// Function to finish the current sequence
 const finishSequence = () => {
   const currentSequence = daySequences.value[activeSequenceIndex.value];
   if (currentSequence && !currentSequence.finished) {
@@ -167,7 +156,6 @@ const finishSequence = () => {
   }
 };
 
-// Function to show the next sequence
 const showNextSequence = () => {
   const nextIndex = daySequences.value.findIndex(
     (sequence, index) => index >= activeSequenceIndex.value && !sequence.finished
@@ -183,7 +171,6 @@ const showNextSequence = () => {
   }
 };
 
-// Function to start the timer
 const startTimer = (duration, savedTime = 0) => {
   timeRemaining.value = savedTime > 0 ? savedTime : duration * 60;
 
@@ -206,7 +193,8 @@ const startTimer = (duration, savedTime = 0) => {
   timerPaused = false;
 };
 
-// Function to abandon all sequences for the day
+
+
 const abandonSequences = () => {
   const id = route.params.id;
 
@@ -225,35 +213,31 @@ const abandonSequences = () => {
   $router.go(-1);
 };
 
-// Functions for distance tracking
+// Fonctions pour le suivi de la distance
 let watchId; // Variable pour stocker l'ID de la fonction de suivi
 let previousPosition; // Variable pour stocker la position précédente
 
-// Function to start tracking distance
 const startTrackingDistance = () => {
   watchId = navigator.geolocation.watchPosition(updateDistance);
 };
 
-// Function to stop tracking distance
 const stopTrackingDistance = () => {
   if (watchId) {
     navigator.geolocation.clearWatch(watchId);
   }
 };
 
-// Function to update distance based on current position
 const updateDistance = (position) => {
   if (previousPosition) {
-    // Calculate the distance between the previous and current positions
+    // Calcule la distance entre les positions précédente et actuelle
     const currentDistance = calculateDistance(previousPosition, position.coords);
     distance.value += currentDistance;
   }
 
-  // Update the previous position
+  // Met à jour la position précédente
   previousPosition = position.coords;
 };
 
-// Function to calculate distance between two coordinates
 const calculateDistance = (coord1, coord2) => {
   const earthRadius = 6371; // Rayon moyen de la Terre en kilomètres
   const lat1 = degToRad(coord1.latitude);
@@ -274,22 +258,20 @@ const calculateDistance = (coord1, coord2) => {
   return distance * 1000; // Convertit en mètres
 };
 
-// Function to convert degrees to radians
 const degToRad = (deg) => {
   return deg * (Math.PI / 180);
 };
 
-// Lifecycle hook: Fetch day sequences on component mount
 onMounted(() => {
   daySequences.value = programStore.getDaySequences(id.value);
 
   if (daySequences.value.length > 0) {
     calculateTotalDuration();
     showNextSequence();
+    
   }
 });
 
-// Watcher: Start the timer and distance tracking when activeSequenceIndex changes
 watch(activeSequenceIndex, (newValue, oldValue) => {
   if (newValue !== oldValue) {
     const currentSequence = daySequences.value[newValue];
@@ -300,17 +282,12 @@ watch(activeSequenceIndex, (newValue, oldValue) => {
   }
 });
 
-// Lifecycle hook: Clear timers and update local storage on component unmount
 onBeforeUnmount(() => {
   clearInterval(timer);
   stopTrackingDistance(); // Arrête le suivi de la distance
   programStore.updateLocalStorage();
 });
 </script>
-
-
-
-
 <style>
 .restart{
   margin-left: 20px;
