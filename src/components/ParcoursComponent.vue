@@ -8,7 +8,7 @@
 
       <div v-show="!currentSequence.finished">
         <!-- Display current sequence type and time -->
-        <h2 v-show="timer && !timerPaused" class="subtitle is-1">{{ currentSequence.type }} for {{ currentSequence.time }} minutes</h2>
+        <h2 v-show="timer && !timerPaused" class="subtitle is-1">{{ currentSequence.type }} during {{ currentSequence.time }} minutes</h2>
 
         <!-- Display time, distance, and total time remaining -->
         <div class="container time mb-5">
