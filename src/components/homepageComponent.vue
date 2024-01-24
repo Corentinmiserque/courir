@@ -32,12 +32,12 @@
             <div class="box">
               <div class="columns is-centered is-justify-content-space-around ">
                 <!-- Loop through active week's days -->
-                <div v-for="(day, dayIndex) in activeWeek.days" :key="day.dayID" class='column box is-2 has-text-centered'>
+                <div v-for="(day, dayIndex) in activeWeek.days" :key="day.dayID" class='column box is-2 has-text-centered day'>
                   <!-- Display day status based on completion -->
                   <span v-if="day.finished" class="finished-day ">Day {{ dayIndex + 1 }} (Finished)</span>
                   <span v-else-if="day.finished === false && dayIndex > countFinishedDaysInWeek(activeWeek)" class="upcoming-day">Day {{ dayIndex + 1 }} (Upcoming)</span>
                   <!-- Link to the route for the day -->
-                  <RouterLink v-else :to="{ name: 'parcours', params: { id: day.dayID } }">Day {{ dayIndex + 1 }}</RouterLink>
+                  <RouterLink v-else :to="{ name: 'parcours', params: { id: day.dayID } }"><span class="overlay"> Day {{ dayIndex + 1 }}</span></RouterLink>
                 </div>
               </div>
             </div>
@@ -144,4 +144,20 @@ onMounted( () => {
 .upcoming-day {
   color: red;
 }
+.day {
+  position: relative;
+}
+
+span::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100; /* Assurez-vous que le pseudo-élément est derrière le texte */
+}
+
 </style>
