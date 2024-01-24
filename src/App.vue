@@ -20,7 +20,7 @@ onMounted(() => {
 <template>
   <header>
     <div class="install">
-      <button class="install-btn hidden">Install</button>
+      <button class="install-btn  button is-danger hidden">Install</button>
     </div>
 
     <section class="section">
