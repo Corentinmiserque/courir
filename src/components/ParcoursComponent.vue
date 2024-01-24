@@ -164,7 +164,7 @@ const toggleTimer = () => {
   }
 };
 
-
+//
 // Function to finish the current sequence
 const finishSequence = () => {
   const currentSequence = daySequences.value[activeSequenceIndex.value];
