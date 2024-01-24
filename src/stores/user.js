@@ -3,13 +3,7 @@ import { defineStore } from 'pinia';
 export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
-    user: {
-      options: {
-        notification: false,
-        sound: true,
-        vibration: true,
-      },
-    },
+    user: {},
     errorUser: false,
   }),
   getters: {
@@ -50,3 +44,6 @@ export const useUserStore = defineStore({
     },
   },
 });
+
+
+
