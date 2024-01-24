@@ -3,12 +3,21 @@ import { defineStore } from 'pinia';
 export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
-    user: {},
+    user: {
+      options: {
+        notification: false,
+        sound: true,
+        vibration: true,
+      },
+    },
     errorUser: false,
   }),
   getters: {
     theUser: (state) => {
       return state.user;
+    },
+    userOptions: (state) => {
+      return state.user.options;
     },
   },
   actions: {
@@ -24,10 +33,19 @@ export const useUserStore = defineStore({
     },
 
     changeProgram(selectedProgramID) {
-      // Add logic to update the selected program in the user data
-      this.user.selectedProgramID = selectedProgramID;
+      if (!this.user.options) {
+        this.user.options = {};
+      }
 
-      // Save the updated user data
+      this.user.selectedProgramID = selectedProgramID;
+      this.saveUserData(this.user);
+    },
+
+    updateOption(optionName, value) {
+      // Mettez à jour l'option spécifiée dans les données de l'utilisateur
+      this.user.options[optionName] = value;
+
+      // Sauvegardez les données utilisateur mises à jour
       this.saveUserData(this.user);
     },
   },

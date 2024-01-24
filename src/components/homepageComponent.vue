@@ -27,10 +27,10 @@
               </div>
             </div>
             </div>
-            <div class=" is-centered box">
-              <div class="columns is-6 is-justify-content-space-around">
+            <div class=" box">
+              <div class="columns is-6  container">
                 <button @click="resetWeek" class="button is-danger">Réinitialiser la semaine</button>
-                <button @click="resetProgram" class="button is-danger">Réinitialiser le programme</button>
+                <button @click="resetProgram" class="button reset is-danger">Réinitialiser le programme</button>
               </div>
             </div>
           </div>
@@ -120,5 +120,8 @@ onMounted( () => {
 
 .upcoming-day {
   color: red;
+}
+.reset{
+  margin-left: 20px;
 }
 </style>

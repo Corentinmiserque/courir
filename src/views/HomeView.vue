@@ -1,6 +1,6 @@
 <template>
   <div class="container content">
-    <HeaderComponent :userData="userData" :programs="data.programs"></HeaderComponent>
+    <HeaderComponent :userData="userData" text="Welcom back"></HeaderComponent>
 
     <section class="main-content container content">
       <ul class="tabs">
@@ -18,9 +18,8 @@ import homepageComponent from '@/components/homepageComponent.vue';
 import legendComponent from '@/components/legendComponent.vue';
 import footerComponent from '@/components/footerComponent.vue';
 import optionsComponent from '@/components/optionsComponent.vue';
-import GraphComponent from '@/components/GraphComponent.vue';
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue'
 import { useProgramStore } from '@/stores/programs';
 import { useUserStore } from '@/stores/user';
 
@@ -42,14 +41,19 @@ const tabs = [
   {
     label: "Options",
     composant: optionsComponent
-  },
-  {
-    label: "Graph",
-    composant: GraphComponent
   }
 ];
 
 const currentTab = ref(tabs[0]);
+const reloaded = ref(localStorage.getItem('reloaded') === 'true');
+
+onMounted(() => {
+  // Rechargez la page une seule fois après le montage du composant
+  if (!reloaded.value) {
+    localStorage.setItem('reloaded', 'true');
+    location.reload();
+  }
+});
 </script>
 
 <style>
