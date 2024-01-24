@@ -12,7 +12,7 @@
         <!-- Display time, distance, and total time remaining -->
         <div class="container time mb-5">
           <div v-if="activeSequenceIndex === activeSequenceIndex">
-            <p class="subtitle is-5">Time remaining: {{ formatTime(timeRemaining) }}</p>
+            <p class="subtitle is-5">Step time remaining: {{ formatTime(timeRemaining) }}</p>
           </div>
           <div>
             <p class="subtitle is-5">Distance covered: {{ distance.toFixed(0) }} meters</p>
