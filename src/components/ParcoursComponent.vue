@@ -4,7 +4,8 @@
     <!-- Check if daySequences is not empty -->
     <div v-if="daySequences && daySequences.length" class="box">
       <!-- Display current sequence information -->
-      <h3 class="title is-4" v-show="!currentSequence.finished"> Step {{ activeSequenceIndex + 1 }} of {{ daySequences.length }}</h3>
+      <h3 class="title is-3" v-show="!currentSequence.finished"> Step {{ timer ? activeSequenceIndex + 1 : 0 }} of {{ daySequences.length }}</h3>
+
       <div v-show="!currentSequence.finished">
         <!-- Display current sequence type and time -->
         <h2 v-show="timer && !timerPaused" class="subtitle is-1">{{ currentSequence.type }} for {{ currentSequence.time }} minutes</h2>
@@ -17,7 +18,7 @@
           <div>
             <p class="subtitle is-5">Distance covered: {{ distance.toFixed(0) }} meters</p>
           </div>
-          <p class="subtitle is-5">Total time remaining: {{ formatTime(totalTimeRemaining) }}</p>
+          <p class="title is-4">Total time remaining: {{ formatTime(totalTimeRemaining) }}</p>
         </div>
       </div>
     </div>
