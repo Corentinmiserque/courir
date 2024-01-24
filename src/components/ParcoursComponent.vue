@@ -56,9 +56,6 @@
   </div>
 </template>
 
-  
-
-
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -229,9 +226,12 @@ const abandonSequences = () => {
 let watchId; // Variable pour stocker l'ID de la fonction de suivi
 let previousPosition; // Variable pour stocker la position précédente
 
-// Function to start tracking distance
+// Function to start tracking distance with a timeout
 const startTrackingDistance = () => {
-  watchId = navigator.geolocation.watchPosition(updateDistance);
+  watchId = navigator.geolocation.watchPosition(updateDistance,  {
+    enableHighAccuracy: true,
+    timeout: 1000, // Timeout en millisecondes (1 seconde)
+  });
 };
 
 // Function to stop tracking distance
@@ -286,6 +286,7 @@ onMounted(() => {
   if (daySequences.value.length > 0) {
     calculateTotalDuration();
     showNextSequence();
+    startTrackingDistance(); // Démarre le suivi de la distance
   }
 });
 
@@ -295,7 +296,6 @@ watch(activeSequenceIndex, (newValue, oldValue) => {
     const currentSequence = daySequences.value[newValue];
     if (currentSequence && !currentSequence.finished) {
       startTimer(currentSequence.time, timeRemaining.value);
-      startTrackingDistance(); // Démarre le suivi de la distance
     }
   }
 });
