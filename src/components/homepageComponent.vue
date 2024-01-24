@@ -1,36 +1,36 @@
 <template>
   <div class="homepage-info container">
     <div v-for="(program, programIndex) in filteredPrograms" :key="program.programID">
-      <h2 class="title is-4">Programme : {{ program.name }}</h2>
+      <h2 class="title is-4">Program: {{ program.name }}</h2>
 
       <div v-if="program.weeks.some(week => !week.finished)">
         <div class='box' v-if="activeWeek = program.weeks.find(week => !week.finished)">
           <div class="week container">
             <div class="box">
-            <h3 class="subtitle is-5">Semaine {{ program.weeks.findIndex(week => !week.finished) + 1 }} sur {{ program.durationWeek }}</h3>
-            <div class="progress container">
-              <progress :id="'progress-bar-week-' + programIndex" class="progress is-primary" value="0" max="100"></progress>
-            </div>
+              <h3 class="subtitle is-5">Week {{ program.weeks.findIndex(week => !week.finished) + 1 }} of {{ program.durationWeek }}</h3>
+              <div class="progress container">
+                <progress :id="'progress-bar-week-' + programIndex" class="progress is-primary" value="0" max="100"></progress>
+              </div>
 
-            <div class="day-progress container">
-              <h3>Jour {{ countFinishedDaysInWeek(activeWeek) }} sur {{ activeWeek.days.length }}</h3>
-              <progress :id="'progress-bar-day-' + programIndex" class="progress is-info" value="0" max="100"></progress>
-            </div>
-          </div>
-          <div class="box">
-          <div class="columns is-centered is-justify-content-space-around ">
-              <div v-for="(day, dayIndex) in activeWeek.days" :key="day.dayID" class='column box is-2 has-text-centered'>
-                <span v-if="day.finished" class="finished-day ">Jour {{ dayIndex + 1 }} (Terminé)</span>
-                
-                <span v-else-if="day.finished === false && dayIndex > countFinishedDaysInWeek(activeWeek)" class="upcoming-day">Jour {{ dayIndex + 1 }} (À venir)</span>
-                <RouterLink v-else :to="{ name: 'parcours', params: { id: day.dayID } }">Jour {{ dayIndex + 1 }}</RouterLink>
+              <div class="day-progress container">
+                <h3>Day {{ countFinishedDaysInWeek(activeWeek) }} of {{ activeWeek.days.length }}</h3>
+                <progress :id="'progress-bar-day-' + programIndex" class="progress is-info" value="0" max="100"></progress>
               </div>
             </div>
+            <div class="box">
+              <div class="columns is-centered is-justify-content-space-around ">
+                <div v-for="(day, dayIndex) in activeWeek.days" :key="day.dayID" class='column box is-2 has-text-centered'>
+                  <span v-if="day.finished" class="finished-day ">Day {{ dayIndex + 1 }} (Finished)</span>
+
+                  <span v-else-if="day.finished === false && dayIndex > countFinishedDaysInWeek(activeWeek)" class="upcoming-day">Day {{ dayIndex + 1 }} (Upcoming)</span>
+                  <RouterLink v-else :to="{ name: 'parcours', params: { id: day.dayID } }">Day {{ dayIndex + 1 }}</RouterLink>
+                </div>
+              </div>
             </div>
             <div class=" box">
               <div class="columns is-6  container">
-                <button @click="resetWeek" class="button is-danger">Réinitialiser la semaine</button>
-                <button @click="resetProgram" class="button reset is-danger">Réinitialiser le programme</button>
+                <button @click="resetWeek" class="button is-danger">Reset Week</button>
+                <button @click="resetProgram" class="button reset is-danger">Reset Program</button>
               </div>
             </div>
           </div>
@@ -39,6 +39,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
