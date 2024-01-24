@@ -144,6 +144,7 @@ const pauseTimer = () => {
   stopTrackingDistance(); // Arrête le suivi de la distance
 };
 
+
 // Function to toggle the timer (pause/resume)
 const toggleTimer = () => {
   if (timer) {
@@ -155,7 +156,14 @@ const toggleTimer = () => {
       startTrackingDistance(); // Démarre le suivi de la distance
     }
   }
+  // Update the button text based on the timer state
+  const buttonText = timerPaused ? 'Resume' : 'Pause';
+  const buttonElement = document.querySelector('.button.is-info');
+  if (buttonElement) {
+    buttonElement.innerText = buttonText;
+  }
 };
+
 
 // Function to finish the current sequence
 const finishSequence = () => {
