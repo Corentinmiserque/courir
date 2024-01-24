@@ -3,7 +3,7 @@
     <div v-if="daySequences && daySequences.length" class="box">
       <h3 class="title is-4">Séquence pour le jour {{ id }} - Étape {{ activeSequenceIndex + 1 }} sur {{ daySequences.length }}</h3>
       <div v-show="!currentSequence.finished">
-        <h2 class="subtitle is-1">{{ currentSequence.type }} pendant {{ currentSequence.time }} minutes</h2>
+        <h2 v-show="timer && !timerPaused" class="subtitle is-1">{{ currentSequence.type }} pendant {{ currentSequence.time }} minutes</h2>
         <div v-if="activeSequenceIndex === activeSequenceIndex">
           <p class="subtitle is-5">Temps restant : {{ formatTime(timeRemaining) }}</p>
         </div>

@@ -4,7 +4,7 @@ export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
     user: {
-      options: {},
+      // options: {},
     },
     errorUser: false,
   }),
@@ -24,7 +24,14 @@ export const useUserStore = defineStore({
     loadUserData() {
       const storedData = localStorage.getItem('userData');
       if (storedData) {
-        this.user = JSON.parse(storedData);
+        const parsedData = JSON.parse(storedData);
+
+        // Vérifie si l'objet 'user' a la propriété 'options'
+        if (parsedData.user && !parsedData.user.options) {
+          parsedData.user.options = {};
+        }
+
+        this.user = parsedData;
       }
     },
 
