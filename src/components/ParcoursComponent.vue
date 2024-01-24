@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-if="daySequences && daySequences.length" class="box">
-      <h3 class="title is-4"> Étape {{ activeSequenceIndex + 1 }} sur {{ daySequences.length }}</h3>
+      <h3 class="title is-4">Séquence pour le jour {{ id }} - Étape {{ activeSequenceIndex + 1 }} sur {{ daySequences.length }}</h3>
       <div v-show="!currentSequence.finished">
-        <h2 v-show="showSequenceTitle" class="subtitle is-1">{{ currentSequence.type }} pendant {{ currentSequence.time }} minutes</h2>
+        <h2 class="subtitle is-1">{{ currentSequence.type }} pendant {{ currentSequence.time }} minutes</h2>
         <div v-if="activeSequenceIndex === activeSequenceIndex">
           <p class="subtitle is-5">Temps restant : {{ formatTime(timeRemaining) }}</p>
         </div>
@@ -13,32 +13,21 @@
         <p class="subtitle is-5">Temps total restant : {{ formatTime(totalTimeRemaining) }}</p>
       </div>
       <div class="buttons">
-        <button @click="start" v-show="!timer" class="button is-primary">
+        <button @click="start" :disabled="timer" class="button is-primary">
           Start
         </button>
-
-        <button @click="toggleTimer" v-show="!currentSequence.finished" class="button is-info">
+        <button @click="toggleTimer" class="button is-info">
           {{ timerPaused ? 'Reprendre' : 'Pause' }}
         </button>
-
-        <button @click="abandonSequences" v-show="!currentSequence.finished" class="button is-danger">
-          Abandonner
+        <button @click="abandonSequences" class="button is-danger">
+          Abandonné
         </button>
       </div>
-      
       <div v-show="currentSequence.finished">
       <div class="congratulations">
         <h2 class="title is-2">Félicitations!</h2>
         <p>Vous avez couru {{ distance.toFixed(0) }} mètres en {{ formatTime(totalTimeElapsed) }}.</p>
-
-        <button @click="goToPreviousPage" class="button is-info">
-          Retour à la page précédente
-        </button>
-
-        <button @click="abandonSequences" class="button is-danger">
-          Recommencer
-        </button>
-       
+        <button @click="goToPreviousPage">Retour à la page précédente</button>
       </div>
       </div>
     </div>
@@ -56,42 +45,24 @@ import { useUserStore } from '@/stores/user';
 const $router = useRouter();
 const route = useRoute();
 const id = ref(route.params.id);
-
-//permets d'empecher de lire plusieurs fois le meme message
 let lastAnnouncedMessage = "";
-
 const programStore = useProgramStore();
-const userStore = useUserStore();
-
-
+const userStore = useUserStore()
 const daySequences = ref([]);
 const activeSequenceIndex = ref(0);
 const timeRemaining = ref(0);
-
 let timer;
 let timerPaused = false;
-
-const currentSequence = ref({}); //stock séquence en cours 
-
+const currentSequence = ref({});
 const distance = ref(0); // Variable pour stocker la distance parcourue
-
 const totalDuration = ref(0);
 const totalTimeRemaining = ref(0);
 const totalTimeElapsed = ref(0);
-
-const showSequenceTitle = ref(false); // permet d'afficher le titre seulement au start
 
 const formatTime = (seconds) => {
   const minutes = Math.floor(seconds / 60);
   const secondsRemaining = seconds % 60;
   return `${minutes}:${secondsRemaining < 10 ? '0' : ''}${secondsRemaining}`;
-};
-
-const vibrate = (pattern) => {
-  // Vérifie si la fonction vibrate est prise en charge par le navigateur
-  if ('vibrate' in navigator) {
-    navigator.vibrate(pattern);
-  }
 };
 
 const calculateTotalDuration = () => {
@@ -106,25 +77,32 @@ const updateTotalTimeRemaining = () => {
   totalTimeRemaining.value = totalDuration.value - totalTimeElapsed.value;
 };
 
+const optionSound = userStore.theUser.options.sound;
+const optionVibration = userStore.theUser.options.vibration
+
 const speak = (text) => {
-  // Vérifie si le son est activé avant de parler
-  if (userStore.user.options.sound) {
-    if (text !== lastAnnouncedMessage) {
-      const synth = window.speechSynthesis;
-
-      // Vérifie si la synthèse vocale est disponible
-      if (synth && synth.getVoices().length > 0) {
-        const utterance = new SpeechSynthesisUtterance(text);
-
-        // Utilise la première voix disponible plutôt que de spécifier une voix
-        utterance.voice = synth.getVoices()[0];
-
-        synth.speak(utterance);
-        lastAnnouncedMessage = text;
-      }
+  if (text !== lastAnnouncedMessage && optionSound) {
+    const synth = window.speechSynthesis;
+    
+    // Vérifier si la synthèse vocale est disponible
+    if (synth && synth.getVoices().length > 0) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Utiliser la première voix disponible plutôt que de spécifier une voix
+      utterance.voice = synth.getVoices()[0];
+      
+      synth.speak(utterance);
+      lastAnnouncedMessage = text;
     }
   }
 };
+
+const vibrate = () => {
+  if (navigator.vibrate & optionVibration) {
+    navigator.vibrate([200, 100, 200]); // Modifiez le modèle de vibration selon vos besoins
+  }
+};
+
 
 const start = () => {
   if (!timer) {
@@ -132,7 +110,6 @@ const start = () => {
     if (currentSequence && !currentSequence.finished) {
       startTimer(currentSequence.time, timeRemaining.value);
       startTrackingDistance(); // Démarre le suivi de la distance
-      showSequenceTitle.value = true; 
     }
   }
 };
@@ -151,20 +128,10 @@ const toggleTimer = () => {
     const currentSequence = daySequences.value[activeSequenceIndex.value];
     if (currentSequence && !currentSequence.finished) {
       startTimer(currentSequence.time, timeRemaining.value);
-      startTrackingDistance();
-      timerPaused = false;
+      startTrackingDistance(); // Démarre le suivi de la distance
     }
   }
-
-  // Directly manipulate the button text
-  const button = document.querySelector('.button.is-info');
-  if (button) {
-    button.innerText = timerPaused ? 'Reprendre' : 'Pause';
-  }
 };
-
-
-
 
 const finishSequence = () => {
   const currentSequence = daySequences.value[activeSequenceIndex.value];
@@ -182,13 +149,12 @@ const showNextSequence = () => {
   );
 
   if (nextIndex !== -1) {
-    vibrate([200, 100, 200]); // Exemple de motif de vibration (vibre 200 ms, pause 100 ms, puis vibre à nouveau 200 ms)
-    
     activeSequenceIndex.value = nextIndex;
     currentSequence.value = daySequences.value[nextIndex];
     
     // Recalculate total time remaining after updating active sequence index
     updateTotalTimeRemaining();
+    vibrate();
   }
 };
 

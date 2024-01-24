@@ -3,7 +3,9 @@ import { defineStore } from 'pinia';
 export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
-    user: {},
+    user: {
+      options: {},
+    },
     errorUser: false,
   }),
   getters: {
@@ -36,6 +38,10 @@ export const useUserStore = defineStore({
     },
 
     updateOption(optionName, value) {
+      if (!this.user.options) {
+        this.user.options = {};
+      }
+
       // Mettez à jour l'option spécifiée dans les données de l'utilisateur
       this.user.options[optionName] = value;
 
@@ -44,6 +50,4 @@ export const useUserStore = defineStore({
     },
   },
 });
-
-
 

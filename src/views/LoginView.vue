@@ -51,6 +51,11 @@ const identification = () => {
     const userData = {
       username: pseudo.value,
       selectedProgramID: selectedProgram.value,
+      options: {
+        notification: false,
+        sound: true,
+        vibration: true,
+      }
     };
 
     // Appelle la fonction d'enregistrement des données utilisateur
